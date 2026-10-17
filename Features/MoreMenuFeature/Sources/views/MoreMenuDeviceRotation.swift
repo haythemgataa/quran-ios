@@ -5,7 +5,6 @@
 //  Created by Afifi, Mohamed on 9/5/21.
 //
 
-import NoorUI
 import SwiftUI
 import UIx
 import VLogging
@@ -16,12 +15,12 @@ struct MoreMenuDeviceRotation: View {
 
     var body: some View {
         HStack {
-            DeviceRotation(image: NoorImage.rotateToLandscape.image) {
+            DeviceRotation(image: .rotateToLandscape) {
                 updateOrientationTo = .landscapeLeft
             }
             .disabled(orientation.isLandscape)
 
-            DeviceRotation(image: NoorImage.rotateToPortrait.image) {
+            DeviceRotation(image: .rotateToPortrait) {
                 updateOrientationTo = .portrait
             }
             .disabled(orientation.isPortrait)
@@ -43,11 +42,27 @@ private struct DeviceRotation: View {
     var body: some View {
         Button(action: action) {
             image
-                .renderingMode(.template)
+                .imageScale(.large)
                 .foregroundColor(isEnabled ? .label : .gray)
                 .padding()
                 .frame(minWidth: 0, maxWidth: .infinity)
         }
+    }
+}
+
+private extension Image {
+    static var rotateToLandscape: Image {
+        if #available(iOS 17, *) {
+            return Image(systemName: "rectangle.portrait.rotate")
+        }
+        return Image(systemName: "rotate.left")
+    }
+
+    static var rotateToPortrait: Image {
+        if #available(iOS 17, *) {
+            return Image(systemName: "rectangle.landscape.rotate")
+        }
+        return Image(systemName: "rotate.right")
     }
 }
 
